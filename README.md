@@ -26,7 +26,7 @@ Este projeto faz parte do meu estudo de Fullstack + IA.
 
 4. O servidor vai subir em:
 
-http://localhost:3333
+    http://localhost:3333
 
 5. Para testar se está no ar, acesse:
 

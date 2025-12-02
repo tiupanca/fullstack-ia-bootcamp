@@ -1,91 +1,110 @@
 import { FastifyInstance } from "fastify";
-import { randomUUID } from "crypto";
-import { Task } from "../types/Task";
-
-// Nosso "banco de dados" em memória
-const tasks: Task[] = [];
+import { prisma } from "../lib/prisma";
 
 export async function registerTaskRoutes(app: FastifyInstance) {
-  // Criar tarefa
+  // Criar tarefa no banco
   app.post("/tasks", async (request, reply) => {
-    const body = request.body as { title?: string; description?: string };
+    try {
+      const body = request.body as { title?: string; description?: string };
 
-    if (!body.title) {
-      return reply.status(400).send({ error: "title is required" });
+      if (!body.title) {
+        return reply.status(400).send({ error: "title is required" });
+      }
+
+      const task = await prisma.task.create({
+        data: {
+          title: body.title,
+          description: body.description,
+        },
+      });
+
+      return reply.status(201).send(task);
+    } catch (err) {
+      return reply.status(500).send({ error: "failed to create task", details: err });
     }
-
-    const newTask: Task = {
-      id: randomUUID(),
-      title: body.title,
-      description: body.description,
-      done: false,
-      createdAt: new Date(),
-    };
-
-    tasks.push(newTask);
-
-    return reply.status(201).send(newTask);
   });
 
-  // Listar todas as tarefas
-  app.get("/tasks", async () => {
-    return tasks;
+  // Listar tasks do banco
+  app.get("/tasks", async (_, reply) => {
+    try {
+      const tasks = await prisma.task.findMany({
+        orderBy: { createdAt: "desc" },
+      });
+
+      return reply.send(tasks);
+    } catch (err) {
+      return reply.status(500).send({ error: "failed to list tasks", details: err });
+    }
   });
 
-  // Buscar tarefa por id
+  // Buscar 1 task pelo ID no banco
   app.get("/tasks/:id", async (request, reply) => {
-    const params = request.params as { id: string };
+    try {
+      const params = request.params as { id: string };
 
-    const task = tasks.find((t) => t.id === params.id);
+      const task = await prisma.task.findUnique({
+        where: { id: params.id },
+      });
 
-    if (!task) {
-      return reply.status(404).send({ error: "task not found" });
+      if (!task) {
+        return reply.status(404).send({ error: "task not found" });
+      }
+
+      return task;
+    } catch (err) {
+      return reply.status(500).send({ error: "failed to fetch task", details: err });
     }
-
-    return task;
   });
 
-  // Atualizar tarefa
+  // Atualizar task no banco
   app.put("/tasks/:id", async (request, reply) => {
-    const params = request.params as { id: string };
-    const body = request.body as {
-      title?: string;
-      description?: string;
-      done?: boolean;
-    };
+    try {
+      const params = request.params as { id: string };
+      const body = request.body as { title?: string; description?: string; done?: boolean };
 
-    const taskIndex = tasks.findIndex((t) => t.id === params.id);
+      const existing = await prisma.task.findUnique({
+        where: { id: params.id },
+      });
 
-    if (taskIndex === -1) {
-      return reply.status(404).send({ error: "task not found" });
+      if (!existing) {
+        return reply.status(404).send({ error: "task not found" });
+      }
+
+      const updated = await prisma.task.update({
+        where: { id: params.id },
+        data: {
+          title: body.title ?? existing.title,
+          description: body.description ?? existing.description,
+          done: body.done ?? existing.done,
+        },
+      });
+
+      return reply.send(updated);
+    } catch (err) {
+      return reply.status(500).send({ error: "failed to update task", details: err });
     }
-
-    const current = tasks[taskIndex];
-
-    const updatedTask: Task = {
-      ...current,
-      title: body.title ?? current.title,
-      description: body.description ?? current.description,
-      done: body.done ?? current.done,
-    };
-
-    tasks[taskIndex] = updatedTask;
-
-    return reply.send(updatedTask);
   });
 
-  // Deletar tarefa
+  // Deletar task do banco
   app.delete("/tasks/:id", async (request, reply) => {
-    const params = request.params as { id: string };
+    try {
+      const params = request.params as { id: string };
 
-    const taskIndex = tasks.findIndex((t) => t.id === params.id);
+      const existing = await prisma.task.findUnique({
+        where: { id: params.id },
+      });
 
-    if (taskIndex === -1) {
-      return reply.status(404).send({ error: "task not found" });
+      if (!existing) {
+        return reply.status(404).send({ error: "task not found" });
+      }
+
+      await prisma.task.delete({
+        where: { id: params.id },
+      });
+
+      return reply.status(204).send();
+    } catch (err) {
+      return reply.status(500).send({ error: "failed to delete task", details: err });
     }
-
-    tasks.splice(taskIndex, 1);
-
-    return reply.status(204).send();
   });
 }

@@ -79,7 +79,8 @@ O projeto já está estruturado para receber:
 
 ### **1. Clone & setup**
 
-git clone <seu-repo-url>
+git clone <https://github.com/tiupanca/fullstack-ia-bootcamp.git>
+
 cd fullstack-task-manager
 
 ### **2. Install dependencies**
@@ -91,39 +92,47 @@ npm install
 Crie o .env na raiz:
 
 DATABASE_URL="postgresql://postgres:SUA_SENHA@localhost:5432/fullstack_ia?schema=public"
+
 OPENAI_API_KEY="sk-SUA_CHAVE_AQUI"
 
-4. Generate Prisma Client
+### **4. Generate Prisma Client**
 
 npx prisma generate
 
-5. Apply migrations
+### **5. Apply migrations**
 
 npx prisma migrate dev --name init
 
-6. Run backend
+### **6. Run backend**
 
 npm run dev
-# API: http://localhost:3333
 
-7. Run frontend
+### API: http://localhost:3333
+
+### **7. Run frontend**
 
 cd web
 npm run dev
-# Front: http://localhost:3000/tasks
+
+### Front: http://localhost:3000/tasks
 
 
-📌 Project Status
-Layer	State
+# 📌 Project Status
+
 Backend API	✅ Operational
+
 PostgreSQL Persistence	✅ Synced
+
 Frontend UI	✅ Integrated
+
 CRUD Routes	✅ Complete
+
 AI Priority Ranking	✅ Live
+
 RAG Foundation	🔮 Vector-ready (next step)
 
 
-🤝 Ready for Presentation
+# 🤝 Ready for Presentation
 
 Este projeto servirá como portfólio demonstrável para habilidades:
 

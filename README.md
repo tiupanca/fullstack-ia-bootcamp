@@ -107,17 +107,17 @@ npx prisma migrate dev --name init
 
 npm run dev
 
-### API: http://localhost:3333
+#### API: http://localhost:3333
 
 ### **7. Run frontend**
 
 cd web
 npm run dev
 
-### Front: http://localhost:3000/tasks
+#### Front: http://localhost:3000/tasks
 
 
-# 📌 Project Status
+## 📌 Project Status
 
 Backend API	✅ Operational
 
@@ -132,7 +132,7 @@ AI Priority Ranking	✅ Live
 RAG Foundation	🔮 Vector-ready (next step)
 
 
-# 🤝 Ready for Presentation
+## 🤝 Ready for Presentation
 
 Este projeto servirá como portfólio demonstrável para habilidades:
 

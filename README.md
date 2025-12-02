@@ -22,7 +22,7 @@ Este projeto faz parte do meu estudo de Fullstack + IA.
 3. Rodar o servidor em modo desenvolvimento:
 
    ```bash
-npm run dev
+   npm run dev
 
 4. O servidor vai subir em:
 
@@ -31,5 +31,3 @@ http://localhost:3333
 5. Para testar se está no ar, acesse:
 
 GET http://localhost:3333/health
-
-6. 

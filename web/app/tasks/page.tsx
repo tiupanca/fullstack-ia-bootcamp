@@ -1,3 +1,5 @@
+import { TaskForm } from "./TaskForm";
+
 type Task = {
   id: string;
   title: string;
@@ -30,6 +32,8 @@ export default async function TasksPage() {
           Dados vindo da API em Fastify + PostgreSQL via Prisma.
         </p>
 
+        <TaskForm />
+        
         {tasks.length === 0 ? (
           <div className="border border-dashed border-slate-700 rounded-xl p-6 text-center text-slate-400">
             Nenhuma tarefa cadastrada ainda. Crie uma pela API/Insomnia para

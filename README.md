@@ -78,36 +78,36 @@ O projeto já está estruturado para receber:
 ## 🔌 How to Run Locally
 
 ### **1. Clone & setup**
-```bash
+
 git clone <seu-repo-url>
 cd fullstack-task-manager
 
 ### **2. Install dependencies**
-```bash
+
 npm install
 
 ### **3. Setup database**
 
 Crie o .env na raiz:
-```bash
+
 DATABASE_URL="postgresql://postgres:SUA_SENHA@localhost:5432/fullstack_ia?schema=public"
 OPENAI_API_KEY="sk-SUA_CHAVE_AQUI"
 
 4. Generate Prisma Client
-```bash
+
 npx prisma generate
 
 5. Apply migrations
-```bash
+
 npx prisma migrate dev --name init
 
 6. Run backend
-```bash
+
 npm run dev
 # API: http://localhost:3333
 
 7. Run frontend
-```bash
+
 cd web
 npm run dev
 # Front: http://localhost:3000/tasks

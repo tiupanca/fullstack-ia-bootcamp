@@ -128,7 +128,7 @@ export async function registerTaskRoutes(app: FastifyInstance) {
     }
   });
 
-  // IA: sugerir prioridades
+    // IA: sugerir prioridades
   app.get("/tasks/ai/priority", async (_request, reply) => {
     try {
       const tasks = await prisma.task.findMany({
@@ -146,7 +146,7 @@ export async function registerTaskRoutes(app: FastifyInstance) {
       const systemPrompt = `
 Você é um assistente que prioriza tarefas pessoais.
 Você receberá uma lista de tarefas com id, título, descrição e data de criação.
-Retorne um JSON com:
+Retorne um JSON com o formato EXATO:
 
 {
   "orderedTasks": [
@@ -158,6 +158,8 @@ Retorne um JSON com:
   ],
   "summary": "comentário geral"
 }
+
+NUNCA responda nada fora desse JSON.
 `;
 
       const userContent = tasks
@@ -169,21 +171,22 @@ Retorne um JSON com:
         )
         .join("\n");
 
-      const completion = await openai.responses.create({
+      const completion = await openai.chat.completions.create({
         model: "gpt-4.1-mini",
-        input: [
+        messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userContent },
         ],
         response_format: { type: "json_object" },
       });
 
-      const firstOutput = completion.output[0].content[0];
+      const jsonText = completion.choices[0].message.content;
 
-      const jsonText =
-        (firstOutput as any).type === "output_text"
-          ? (firstOutput as any).text
-          : JSON.stringify(firstOutput);
+      if (!jsonText) {
+        return reply
+          .status(500)
+          .send({ error: "Resposta vazia da IA ao gerar prioridades." });
+      }
 
       let parsed: {
         orderedTasks: { id: string; priority: number; reason: string }[];
@@ -223,10 +226,9 @@ Retorne um JSON com:
         summary: parsed.summary ?? null,
       });
     } catch (err) {
-      console.error(err);
+      console.error("Erro ao chamar IA de prioridade:", err);
       return reply
         .status(500)
         .send({ error: "Erro ao gerar prioridades com IA" });
     }
-  });
-}
+  });}

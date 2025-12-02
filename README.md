@@ -1,33 +1,143 @@
-# Fullstack IA Bootcamp – API de Tarefas
+# 🧠 Fullstack Task Manager with AI (Bootcamp Project)
 
-Pequena API de tarefas (To-Do) feita em **Node.js + TypeScript + Fastify**, com dados em memória.
+Projeto fullstack desenvolvido como estudo autodidata, focado na construção de uma API robusta e interface moderna integradas a análises inteligentes com IA. Atualmente implementa um gerenciador de tarefas com persistência real em banco PostgreSQL e módulo de priorização automática via OpenAI. A arquitetura está preparada para evolução futura com recursos de **RAG**, automações e IA contextual.
 
-Este projeto faz parte do meu estudo de Fullstack + IA.
+---
 
-## ✅ Como rodar o projeto
+## 🚀 Tech Stack
 
-### Requisitos
+### **Backend**
+- Fastify
+- TypeScript
+- Prisma ORM
+- OpenAI SDK Integration
+- REST API Architecture
 
-- Node.js instalado (versão LTS)
-- npm instalado (vem junto com o Node)
+### **Database**
+- PostgreSQL
+- Tasks persistence with UUID
+- Schema managed via Prisma Migrations
+- Structured for future vector embeddings (RAG-ready)
 
-### Passos
+### **Frontend**
+- Next.js 14+ (App Router)
+- TailwindCSS
+- Server & Client Components
+- Real-time data refresh via `router.refresh()`
+- AI suggestions UI block
 
-1. Clonar o repositório ou baixar os arquivos.
-2. Instalar as dependências:
+---
 
-   ```bash
-   npm install
+## ✅ Implemented Features
 
-3. Rodar o servidor em modo desenvolvimento:
+### **Task CRUD**
+- Create task (POST `/tasks`)
+- List tasks (GET `/tasks`)
+- Get task by ID (GET `/tasks/:id`)
+- Update task including `done` status (PUT `/tasks/:id`)
+- Delete task (DELETE `/tasks/:id`)
 
-   ```bash
-   npm run dev
+### **AI Task Prioritization**
+- Smart ranking via `GET /tasks/ai/priority`
+- Returns structured JSON with:
+  - `id`
+  - `priority score`
+  - `reason for ranking`
+  - `overview summary`
 
-4. O servidor vai subir em:
+### **Developer Experience**
+- Full workflow versioned with Git
+- Modular routes layer
+- API consumable via any HTTP client
+- CORS configured for dev environment
+- Clean code with error fallbacks and UI resilience
 
-    http://localhost:3333
+---
 
-5. Para testar se está no ar, acesse:
+## 🔮 Future IA & RAG (Planned Architecture)
 
-GET http://localhost:3333/health
+O projeto já está estruturado para receber:
+
+### **RAG – Retrieval Augmented Generation**
+- Conversão das tasks em embeddings vetoriais (ex: OpenAI, Supabase Vector, Pinecone, ou Postgres + pgvector)
+- Busca semântica para tarefas (ex: "quais tasks envolvem aprendizado de IA?")
+- Chat contextualizado baseado no histórico de tarefas e preferências de estudo
+
+### **IA Features previstos**
+- **Plano inteligente do dia** (time blocking com prioridades)
+- **Sugestões automáticas de estudo fullstack**
+- **Resumo semanal com insights**
+- **Agente IA pessoal** baseado no perfil do usuário
+- **Notificações e automações futuras**
+- **Busca semântica + armazenamento vetorial**
+
+> Status: A fundação da arquitetura está pronta. As próximas camadas serão implementadas sem comprometer a estrutura atual.
+
+---
+
+## 🔌 How to Run Locally
+
+### **1. Clone & setup**
+```bash
+git clone <seu-repo-url>
+cd fullstack-task-manager
+
+### **2. Install dependencies**
+```bash
+npm install
+
+### **3. Setup database**
+
+Crie o .env na raiz:
+```bash
+DATABASE_URL="postgresql://postgres:SUA_SENHA@localhost:5432/fullstack_ia?schema=public"
+OPENAI_API_KEY="sk-SUA_CHAVE_AQUI"
+
+4. Generate Prisma Client
+```bash
+npx prisma generate
+
+5. Apply migrations
+```bash
+npx prisma migrate dev --name init
+
+6. Run backend
+```bash
+npm run dev
+# API: http://localhost:3333
+
+7. Run frontend
+```bash
+cd web
+npm run dev
+# Front: http://localhost:3000/tasks
+
+
+📌 Project Status
+Layer	State
+Backend API	✅ Operational
+PostgreSQL Persistence	✅ Synced
+Frontend UI	✅ Integrated
+CRUD Routes	✅ Complete
+AI Priority Ranking	✅ Live
+RAG Foundation	🔮 Vector-ready (next step)
+
+
+🤝 Ready for Presentation
+
+Este projeto servirá como portfólio demonstrável para habilidades:
+
+Desenvolvimento fullstack moderno
+
+APIs tipadas e persistência de dados
+
+Ready for AI & RAG architecture
+
+Consumo resiliente de rotas assíncronas
+
+Integração com modelos de linguagem
+
+Versionamento profissional e experiência de dev
+
+Construído com foco em evolução contínua e boas práticas.
+Road to Fullstack + AI Specialist 👊🔥

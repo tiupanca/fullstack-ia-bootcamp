@@ -1,25 +1,31 @@
 import Fastify from "fastify";
+import cors from "@fastify/cors";
 import { registerTaskRoutes } from "./routes/tasks";
 
-const app = Fastify({
-  logger: true,
-});
-
-// Rota de saúde (pra ver se está no ar)
-app.get("/health", async () => {
-  return { status: "ok" };
-});
-
-// Registra as rotas de tasks
-app.register(registerTaskRoutes);
-
-// Sobe o servidor
-app
-  .listen({ port: 3333 })
-  .then(() => {
-    console.log("HTTP server running on http://localhost:3333");
-  })
-  .catch((err) => {
-    console.error("Erro ao iniciar o servidor:", err);
-    process.exit(1);
+async function bootstrap() {
+  const app = Fastify({
+    logger: true,
   });
+
+  // CORS liberado pra desenvolvimento
+  await app.register(cors, {
+    origin: true, // aceita qualquer origem durante o dev
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  });
+
+  app.get("/health", async () => {
+    return { status: "ok" };
+  });
+
+  app.register(registerTaskRoutes);
+
+  try {
+    await app.listen({ port: 3333 });
+    console.log("HTTP server running on http://localhost:3333");
+  } catch (err) {
+    app.log.error(err);
+    process.exit(1);
+  }
+}
+
+bootstrap();

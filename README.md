@@ -81,7 +81,7 @@ O projeto já está estruturado para receber:
 
 git clone <https://github.com/tiupanca/fullstack-ia-bootcamp.git>
 
-cd fullstack-task-manager
+cd fullstack-ia-bootcamp
 
 ### **2. Install dependencies**
 
